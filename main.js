@@ -6,8 +6,11 @@ const cdThumb = $(".cd-thumb");
 const audio = $("#audio");
 const playBtn = $(".btn-toggle-play");
 const player = $(".player");
+const progress = $("#progress");
+
 const app = {
   currentIndex: 0,
+  isPlaying: false,
   songs: [
     {
       name: "Only",
@@ -158,6 +161,7 @@ const app = {
     $(".playlist").innerHTML = html.join("");
   },
   handleEvent: function () {
+    const _this = this;
     const cd = $(".cd");
     const cdWidth = cd.offsetWidth;
     //xử lý phóng to thu nhỏ
@@ -170,8 +174,33 @@ const app = {
     };
     //xử lý khi click Play
     playBtn.onclick = function () {
-      audio.play();
-      player.classList.add("playing");
+      if (_this.isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+      //Khi song play
+      audio.onplay = function () {
+        _this.isPlaying = true;
+        player.classList.add("playing");
+      };
+      //khi song pause
+      audio.onpause = function () {
+        _this.isPlaying = false;
+        player.classList.remove("playing");
+      };
+      //Khi tiến độ bài hát thay đổi
+      audio.ontimeupdate = function () {
+        const currentPercent = Math.floor(
+          (audio.currentTime / audio.duration) * 100
+        );
+        progress.value = currentPercent;
+      };
+      //xử lý khi tua bài hát
+      progress.onchange = function (e) {
+        const seekTime = (e.target.value * audio.duration) / 100;
+        audio.currentTime = seekTime;
+      };
     };
   },
 };
