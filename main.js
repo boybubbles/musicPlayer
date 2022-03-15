@@ -63,8 +63,8 @@ const app = {
     {
       name: "Save Your Tear",
       singer: "The WeekEnd",
-      path: "./assests/img/SaveYourTear.jpeg",
-      image: "./assests/music/SaveYourTear.mp3",
+      path: "./assests/music/SaveYourTear.mp3",
+      image: "./assests/img/SaveYourTear.jpeg",
     },
     {
       name: "Ignite",
@@ -179,6 +179,7 @@ const app = {
       }
       audio.play();
       _this.render();
+      _this.scrollToActiveSong();
     };
     //xử lý khi prev
     prevBtn.onclick = function () {
@@ -189,6 +190,7 @@ const app = {
       }
       audio.play();
       _this.render();
+      _this.scrollToActiveSong();
     };
     //Xử lý random bật tắt
     randomBtn.onclick = function (e) {
@@ -203,6 +205,7 @@ const app = {
         nextBtn.click();
       }
       _this.render();
+      _this.scrollToActiveSong();
     };
     //xử lý phát lại 1 bài hát
     repeatBtn.onclick = function (e) {
@@ -232,6 +235,14 @@ const app = {
     } while (newIndex === this.currentIndex);
     this.currentIndex = newIndex;
     this.loadCurrrentSong();
+  },
+  scrollToActiveSong: function () {
+    setTimeout(() => {
+      $(".song.active").scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }, 300);
   },
 };
 app.start();
