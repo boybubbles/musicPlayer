@@ -7,6 +7,8 @@ const audio = $("#audio");
 const playBtn = $(".btn-toggle-play");
 const player = $(".player");
 const progress = $("#progress");
+const nextBtn = $(".btn-next");
+const PrevBtn = $(".btn-prev");
 
 const app = {
   currentIndex: 0,
@@ -179,29 +181,53 @@ const app = {
       } else {
         audio.play();
       }
-      //Khi song play
-      audio.onplay = function () {
-        _this.isPlaying = true;
-        player.classList.add("playing");
-      };
-      //khi song pause
-      audio.onpause = function () {
-        _this.isPlaying = false;
-        player.classList.remove("playing");
-      };
-      //Khi tiến độ bài hát thay đổi
-      audio.ontimeupdate = function () {
-        const currentPercent = Math.floor(
+    };
+    //Khi song play
+    audio.onplay = function () {
+      _this.isPlaying = true;
+      player.classList.add("playing");
+      cdThumbAnimate.play();
+    };
+    //khi song pause
+    audio.onpause = function () {
+      _this.isPlaying = false;
+      player.classList.remove("playing");
+      cdThumbAnimate.pause();
+    };
+    //Khi tiến độ bài hát thay đổi
+    audio.ontimeupdate = function () {
+      if (audio.duration) {
+        const currentPercentage = Math.floor(
           (audio.currentTime / audio.duration) * 100
         );
-        progress.value = currentPercent;
-      };
-      //xử lý khi tua bài hát
-      progress.onchange = function (e) {
-        const seekTime = (e.target.value * audio.duration) / 100;
-        audio.currentTime = seekTime;
-      };
+        progress.value = currentPercentage;
+        console.log(currentPercentage);
+      }
     };
+    //xử lý khi tua bài hát
+    progress.oninput = function (e) {
+      const seekTime = (e.target.value * audio.duration) / 100;
+      audio.currentTime = seekTime;
+    };
+
+    //Xử lý CD quay và dừng
+    const cdThumbAnimate = cdThumb.animate([{ transform: "rotate(360deg)" }], {
+      duration: 10000,
+      iterations: Infinity,
+    });
+    //Xử lý khi next
+    nextBtn.onclick = function () {
+      _this.nextSong();
+    };
+
+    cdThumbAnimate.pause();
+  },
+  nextSong: function () {
+    this.currentIndex++;
+    if (this.currentIndex >= this.songs.length) {
+      this.currentSong = 0;
+    }
+    this.loadCurrrentSong();
   },
 };
 app.start();
