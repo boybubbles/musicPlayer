@@ -21,100 +21,28 @@ const app = {
       image: "./assests/img/Only.jpg",
     },
     {
-      name: "",
+      name: "Floating",
       singer: "Alina Baraz",
       path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
       image: "./assests/img/Floating.jpeg",
     },
     {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
+      name: "PS5",
+      singer: "Salem ilese",
+      path: "./assests/music/PS5 - Salem ilese_ TXT_ Alan Walker.mp3",
+      image: "./assests/img/PS5.jpeg",
     },
     {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
+      name: "ABC Song",
+      singer: "GAYLE",
+      path: "./assests/music/abcdefu - GAYLE_ Royal The Serpent.mp3",
+      image: "./assests/img/ABC.jpeg",
     },
     {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
-    },
-    {
-      name: "",
-      singer: "Alina Baraz",
-      path: "./assests/music/Floating - Alina Baraz_ Khalid_ Filous.mp3",
-      image: "./assests/img/Floating.jpeg",
+      name: "Bones",
+      singer: "Imagine Dragons",
+      path: "./assests/music/Bones - Imagine Dragons.mp3",
+      image: "./assests/img/bone.jpeg",
     },
   ],
   start: function () {
@@ -201,7 +129,6 @@ const app = {
           (audio.currentTime / audio.duration) * 100
         );
         progress.value = currentPercentage;
-        console.log(currentPercentage);
       }
     };
     //xử lý khi tua bài hát
@@ -218,14 +145,15 @@ const app = {
     //Xử lý khi next
     nextBtn.onclick = function () {
       _this.nextSong();
+      audio.play();
     };
 
     cdThumbAnimate.pause();
   },
   nextSong: function () {
     this.currentIndex++;
-    if (this.currentIndex >= this.songs.length) {
-      this.currentSong = 0;
+    if (this.currentIndex > this.songs.length - 1) {
+      this.currentIndex = 0;
     }
     this.loadCurrrentSong();
   },
