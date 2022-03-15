@@ -48,6 +48,30 @@ const app = {
       path: "./assests/music/Bones - Imagine Dragons.mp3",
       image: "./assests/img/bone.jpeg",
     },
+    {
+      name: "Past Lives",
+      singer: "BORNS",
+      path: "./assests/music/Past Lives - BORNS.mp3",
+      image: "./assests/img/pastLives.jpeg",
+    },
+    {
+      name: "Star Boy",
+      singer: "The WeekEnd",
+      path: "./assests/music/Starboy - The Weeknd_ Daft Punk.mp3",
+      image: "./assests/img/Star_boy.jpeg",
+    },
+    {
+      name: "Save Your Tear",
+      singer: "The WeekEnd",
+      path: "./assests/img/SaveYourTear.jpeg",
+      image: "./assests/music/SaveYourTear.mp3",
+    },
+    {
+      name: "Ignite",
+      singer: "K-319 Ft Alan Walker",
+      path: "./assests/music/Ignite - K-391_ Alan Walker_ Julie Berga.mp3",
+      image: "./assests/img/Ignite.jpeg",
+    },
   ],
   start: function () {
     //render playlist
@@ -102,7 +126,6 @@ const app = {
 
     document.onscroll = function () {
       const scrollTop = window.screenY || document.documentElement.scrollTop;
-      console.log(scrollTop);
       const newCDwidth = cdWidth - scrollTop;
       cd.style.width = newCDwidth > 0 ? newCDwidth + "px" : 0;
       cd.style.opacity = newCDwidth / cdWidth;
