@@ -8,11 +8,15 @@ const playBtn = $(".btn-toggle-play");
 const player = $(".player");
 const progress = $("#progress");
 const nextBtn = $(".btn-next");
-const PrevBtn = $(".btn-prev");
+const prevBtn = $(".btn-prev");
+const randomBtn = $(".btn-random");
+const repeatBtn = $(".btn-repeat");
 
 const app = {
   currentIndex: 0,
   isPlaying: false,
+  isRandom: false,
+  isRepeat: false,
   songs: [
     {
       name: "Only",
@@ -71,9 +75,9 @@ const app = {
     });
   },
   render: function () {
-    const html = this.songs.map((song) => {
+    const html = this.songs.map((song, index) => {
       return `
-      <div class="song">
+      <div class="song ${index === this.currentIndex ? "active" : ""}">
         <div
             class="thumb"
             style="background-image: url('${song.image}')"
@@ -98,6 +102,7 @@ const app = {
 
     document.onscroll = function () {
       const scrollTop = window.screenY || document.documentElement.scrollTop;
+      console.log(scrollTop);
       const newCDwidth = cdWidth - scrollTop;
       cd.style.width = newCDwidth > 0 ? newCDwidth + "px" : 0;
       cd.style.opacity = newCDwidth / cdWidth;
@@ -144,10 +149,43 @@ const app = {
     });
     //Xử lý khi next
     nextBtn.onclick = function () {
-      _this.nextSong();
+      if (_this.isRandom) {
+        _this.playRandomSong();
+      } else {
+        _this.nextSong();
+      }
       audio.play();
+      _this.render();
     };
-
+    //xử lý khi prev
+    prevBtn.onclick = function () {
+      if (_this.isRandom) {
+        _this.playRandomSong();
+      } else {
+        _this.preSong();
+      }
+      audio.play();
+      _this.render();
+    };
+    //Xử lý random bật tắt
+    randomBtn.onclick = function (e) {
+      _this.isRandom = !_this.isRandom;
+      randomBtn.classList.toggle("active", _this.isRandom);
+    };
+    //xử lý next khi audio end
+    audio.onended = function () {
+      if (_this.isRepeat) {
+        audio.play();
+      } else {
+        nextBtn.click();
+      }
+      _this.render();
+    };
+    //xử lý phát lại 1 bài hát
+    repeatBtn.onclick = function (e) {
+      _this.isRepeat = !_this.isRepeat;
+      repeatBtn.classList.toggle("active", _this.isRepeat);
+    };
     cdThumbAnimate.pause();
   },
   nextSong: function () {
@@ -155,6 +193,21 @@ const app = {
     if (this.currentIndex > this.songs.length - 1) {
       this.currentIndex = 0;
     }
+    this.loadCurrrentSong();
+  },
+  preSong: function () {
+    this.currentIndex--;
+    if (this.currentIndex < 0) {
+      this.currentIndex = this.songs.length - 1;
+    }
+    this.loadCurrrentSong();
+  },
+  playRandomSong: function () {
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * this.songs.length);
+    } while (newIndex === this.currentIndex);
+    this.currentIndex = newIndex;
     this.loadCurrrentSong();
   },
 };
