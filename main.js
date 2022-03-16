@@ -11,7 +11,7 @@ const nextBtn = $(".btn-next");
 const prevBtn = $(".btn-prev");
 const randomBtn = $(".btn-random");
 const repeatBtn = $(".btn-repeat");
-
+const playList = $(".playlist");
 const app = {
   currentIndex: 0,
   isPlaying: false,
@@ -101,7 +101,9 @@ const app = {
   render: function () {
     const html = this.songs.map((song, index) => {
       return `
-      <div class="song ${index === this.currentIndex ? "active" : ""}">
+      <div class="song ${
+        index === this.currentIndex ? "active" : ""
+      }" data-index="${index}">
         <div
             class="thumb"
             style="background-image: url('${song.image}')"
@@ -211,6 +213,20 @@ const app = {
     repeatBtn.onclick = function (e) {
       _this.isRepeat = !_this.isRepeat;
       repeatBtn.classList.toggle("active", _this.isRepeat);
+    };
+    //xử lý khi click vào bài hát
+    playList.onclick = function (e) {
+      const songNode = e.target.closest(".song:not(.active)");
+      //xử lý khi click vào song
+      if (songNode) {
+        _this.currentIndex = Number(songNode.dataset.index);
+        _this.loadCurrrentSong();
+        _this.render();
+        audio.play();
+      }
+      //xử lý khi click vào option
+      if (e.target.closest(".option")) {
+      }
     };
     cdThumbAnimate.pause();
   },

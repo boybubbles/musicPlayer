@@ -150,6 +150,10 @@ header h2 {
   background-color: var(--primary-color);
 }
 
+.song:hover {
+  cursor: pointer;
+}
+
 .song:active {
   opacity: 0.8;
 }
