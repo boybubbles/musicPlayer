@@ -1,6 +1,7 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+const PLAYER_STORAGE_KEY = "F8_PLAYER";
 const heading = $("header h2");
 const cdThumb = $(".cd-thumb");
 const audio = $("#audio");
@@ -12,11 +13,14 @@ const prevBtn = $(".btn-prev");
 const randomBtn = $(".btn-random");
 const repeatBtn = $(".btn-repeat");
 const playList = $(".playlist");
+
 const app = {
   currentIndex: 0,
   isPlaying: false,
   isRandom: false,
   isRepeat: false,
+  config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
+
   songs: [
     {
       name: "Only",
@@ -73,7 +77,13 @@ const app = {
       image: "./assests/img/Ignite.jpeg",
     },
   ],
+  setConfig: function (key, value) {
+    this.config[key] = value;
+    localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config));
+  },
   start: function () {
+    //Load cấu hình từ config vào ứng dụng
+    this.loadConfig();
     //render playlist
     this.render();
 
@@ -84,9 +94,18 @@ const app = {
     this.defineProperties();
 
     //tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
-    this.loadCurrrentSong();
+    this.loadCurrentSong();
+    //Hiển thị trạng thái ban đầu của button repeat và random
+    repeatBtn.classList.toggle("active", this.isRepeat);
+    randomBtn.classList.toggle("active", this.isRandom);
+    // Lưu config
   },
-  loadCurrrentSong: function () {
+  loadConfig: function () {
+    this.isRandom = this.config.isRandom;
+    this.isRepeat = this.config.isRepeat;
+    this.currentIndex = this.config.currentIndex;
+  },
+  loadCurrentSong: function () {
     heading.textContent = this.currentSong.name;
     cdThumb.style.backgroundImage = `url("${this.currentSong.image}")`;
     audio.src = this.currentSong.path;
@@ -197,6 +216,7 @@ const app = {
     //Xử lý random bật tắt
     randomBtn.onclick = function (e) {
       _this.isRandom = !_this.isRandom;
+      _this.setConfig("isRandom", _this.isRandom);
       randomBtn.classList.toggle("active", _this.isRandom);
     };
     //xử lý next khi audio end
@@ -212,21 +232,26 @@ const app = {
     //xử lý phát lại 1 bài hát
     repeatBtn.onclick = function (e) {
       _this.isRepeat = !_this.isRepeat;
+      _this.setConfig("isRepeat", _this.isRepeat);
+
       repeatBtn.classList.toggle("active", _this.isRepeat);
     };
     //xử lý khi click vào bài hát
     playList.onclick = function (e) {
       const songNode = e.target.closest(".song:not(.active)");
+      const optionNode = e.target.closest(".song .option");
       //xử lý khi click vào song
       if (songNode) {
         _this.currentIndex = Number(songNode.dataset.index);
-        _this.loadCurrrentSong();
+        _this.loadCurrentSong();
         _this.render();
         audio.play();
       }
       //xử lý khi click vào option
-      if (e.target.closest(".option")) {
+      if (optionNode) {
+        console.log(123);
       }
+      _this.setConfig("currentIndex", _this.currentIndex);
     };
     cdThumbAnimate.pause();
   },
@@ -235,14 +260,18 @@ const app = {
     if (this.currentIndex > this.songs.length - 1) {
       this.currentIndex = 0;
     }
-    this.loadCurrrentSong();
+    this.loadCurrentSong();
+    this.setConfig("currentSong", this.currentSong);
+    this.setConfig("currentIndex", this.currentIndex);
   },
   preSong: function () {
     this.currentIndex--;
     if (this.currentIndex < 0) {
       this.currentIndex = this.songs.length - 1;
     }
-    this.loadCurrrentSong();
+    this.loadCurrentSong();
+    this.setConfig("currentSong", this.currentSong);
+    this.setConfig("currentIndex", this.currentIndex);
   },
   playRandomSong: function () {
     let newIndex;
@@ -250,7 +279,9 @@ const app = {
       newIndex = Math.floor(Math.random() * this.songs.length);
     } while (newIndex === this.currentIndex);
     this.currentIndex = newIndex;
-    this.loadCurrrentSong();
+    this.loadCurrentSong();
+    this.setConfig("currentSong", this.currentSong);
+    this.setConfig("currentIndex", this.currentIndex);
   },
   scrollToActiveSong: function () {
     setTimeout(() => {
