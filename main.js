@@ -182,8 +182,12 @@ const app = {
     };
     //xử lý khi tua bài hát
     progress.oninput = function (e) {
+      audio.pause();
       const seekTime = (e.target.value * audio.duration) / 100;
-      audio.currentTime = seekTime;
+      progress.onmouseup = function () {
+        audio.currentTime = seekTime;
+        audio.play();
+      };
     };
 
     //Xử lý CD quay và dừng
