@@ -127,7 +127,7 @@ const app = {
     //xử lý phóng to thu nhỏ
 
     document.onscroll = function () {
-      const scrollTop = window.screenY || document.documentElement.scrollTop;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const newCDwidth = cdWidth - scrollTop;
       cd.style.width = newCDwidth > 0 ? newCDwidth + "px" : 0;
       cd.style.opacity = newCDwidth / cdWidth;
